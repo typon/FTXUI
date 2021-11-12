@@ -333,9 +333,37 @@ int main(int argc, const char* argv[]) {
            border;
   });
 
+  auto paragraph_renderer = Renderer([&] {
+    std::string str =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing "
+        "elit. Sed euismod, urna eu tincidunt lobortis, "
+        "nisl nisl euismod nisi, eu pretium ipsum nisl "
+        "sit amet nunc. Nulla facilisi. Donec euismod "
+        "lorem eu nunc lobortis, eu aliquet nunc "
+        "consequat. Nullam euismod, nisl eu tincidunt ";
+    return vbox({
+               hflow(paragraph(str)),
+               separator(),
+               hflow(paragraph(str)),
+               separator(),
+               hbox({
+                   hflow(paragraph(str)),
+                   separator(),
+                   hbox({
+                       hflow(paragraph(str)),
+                       separator(),
+                       hflow(paragraph(str)),
+                   }) | border |xflex_grow,
+               }) | xflex_grow,
+               separator(),
+               hflow(paragraph(str)),
+           }) |
+           border | vscroll_indicator | yframe;
+  });
+
   int tab_index = 0;
   std::vector<std::string> tab_entries = {
-      "htop", "color", "spinner", "gauge", "compiler",
+      "htop", "color", "spinner", "gauge", "compiler", "paragraph",
   };
   auto tab_selection = Toggle(&tab_entries, &tab_index);
   auto tab_content = Container::Tab(
@@ -345,6 +373,7 @@ int main(int argc, const char* argv[]) {
           spinner_tab_renderer,
           gauge_component,
           compiler_renderer,
+          paragraph_renderer,
       },
       &tab_index);
 
