@@ -24,6 +24,14 @@ Element cell(const char* t) {
 }
 }  // namespace
 
+TEST(GridboxTest, UnfilledRectangular) {
+  auto root = gridbox({
+      {text("1"), text("2"), text("3"), text("4")},
+      {},
+      {},
+  });
+}
+
 TEST(GridboxTest, DifferentSize) {
   auto root = gridbox({
       {cell("1"), cell("22"), cell("333")},

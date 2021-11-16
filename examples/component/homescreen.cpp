@@ -333,32 +333,51 @@ int main(int argc, const char* argv[]) {
            border;
   });
 
+  auto make_box = [](size_t dimx, size_t dimy) {
+    std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
+    return window(text(title) | hcenter | bold,
+                  text("content") | hcenter | dim) |
+           size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
+  };
+
   auto paragraph_renderer = Renderer([&] {
-    std::string str =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing "
-        "elit. Sed euismod, urna eu tincidunt lobortis, "
-        "nisl nisl euismod nisi, eu pretium ipsum nisl "
-        "sit amet nunc. Nulla facilisi. Donec euismod "
-        "lorem eu nunc lobortis, eu aliquet nunc "
-        "consequat. Nullam euismod, nisl eu tincidunt ";
-    return vbox({
-               hflow(paragraph(str)),
-               separator(),
-               hflow(paragraph(str)),
-               separator(),
-               hbox({
-                   hflow(paragraph(str)),
-                   separator(),
-                   hbox({
-                       hflow(paragraph(str)),
-                       separator(),
-                       hflow(paragraph(str)),
-                   }) | border |xflex_grow,
-               }) | xflex_grow,
-               separator(),
-               hflow(paragraph(str)),
-           }) |
-           border | vscroll_indicator | yframe;
+    return flow({
+        make_box(10, 5),
+        make_box(11, 6),
+        make_box(12, 5),
+        make_box(13, 7),
+        make_box(10, 5),
+        make_box(12, 5),
+        make_box(11, 6),
+        make_box(10, 5),
+        make_box(12, 6),
+        make_box(10, 5),
+    }, FlowConfig().Set(FlowConfig::Direction::RowInversed));
+    // std::string str =
+    //"Lorem ipsum dolor sit amet, consectetur adipiscing "
+    //"elit. Sed euismod, urna eu tincidunt lobortis, "
+    //"nisl nisl euismod nisi, eu pretium ipsum nisl "
+    //"sit amet nunc. Nulla facilisi. Donec euismod "
+    //"lorem eu nunc lobortis, eu aliquet nunc "
+    //"consequat. Nullam euismod, nisl eu tincidunt ";
+    //return vbox({
+               //hflow(paragraph(str)),
+               //separator(),
+               //hflow(paragraph(str)),
+               //separator(),
+               //hbox({
+                   //hflow(paragraph(str)),
+                   //separator(),
+                   //hbox({
+                       //hflow(paragraph(str)),
+                       //separator(),
+                       //hflow(paragraph(str)),
+    //}) | border | xflex_grow,
+    //}) | xflex_grow,
+    // separator(),
+    // hflow(paragraph(str)),
+    //}) |
+    // border | vscroll_indicator | yframe;
   });
 
   int tab_index = 0;

@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 
+#include "ftxui/dom/flow_config.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
@@ -70,7 +71,9 @@ Element hbox(Elements);
 Element vbox(Elements);
 Element dbox(Elements);
 Element gridbox(std::vector<Elements> lines);
+Element flow(Elements, FlowConfig);
 Element hflow(Elements);
+Element vflow(Elements);
 
 // -- Flexibility ---
 // Define how to share the remaining space when not all of it is used inside a

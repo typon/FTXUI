@@ -77,26 +77,49 @@ Dimensions Dimension::Fit(Element& e) {
   box.x_max = fullsize.dimx;
   box.y_max = fullsize.dimy;
 
+  std::cerr << box.x_max << " " << box.y_max << std::endl;
+
   Node::Status status;
   e->Check(&status);
   while (status.need_iteration && status.iteration < 20) {
     e->ComputeRequirement();
+    std::cerr << status.need_iteration
+      << " " 
+      << e->requirement().min_x 
+      << " " 
+      << e->requirement().min_y
+      << " " 
+      << std::endl;
+
+    // Don't give the element more space than it needs:
+    box.x_max = std::min(box.x_max, e->requirement().min_x);
+    box.y_max = std::min(box.y_max, e->requirement().min_y);
+
     e->SetBox(box);
     status.need_iteration = false;
     status.iteration++;
     e->Check(&status);
+    std::cerr << status.need_iteration
+      << " " 
+      << e->requirement().min_x 
+      << " " 
+      << e->requirement().min_y
+      << " " 
+      << std::endl;
 
-    // Increase the size of the box until it fits.
-    if (status.need_iteration) {
-      box.x_max = std::max(box.x_max, e->requirement().min_x - 1);
-      box.y_max = std::max(box.y_max, e->requirement().min_y - 1);
-      box.x_max = std::min(box.x_max, fullsize.dimx);
-      box.y_max = std::min(box.y_max, fullsize.dimy);
-    }
+    if (!status.need_iteration)
+      break;
+    // Increase the size of the box until it fits, but not more than the with of
+    // the terminal emulator:
+    box.x_max = std::min(e->requirement().min_x, fullsize.dimx);
+    box.y_max = std::min(e->requirement().min_y, fullsize.dimy);
   }
 
-  return {std::min(e->requirement().min_x, fullsize.dimx),
-          std::min(e->requirement().min_y, fullsize.dimy)};
+  std::cerr << "(" << box.x_max << "," << box.y_max << ")" << std::endl;
+  return {
+      box.x_max,
+      box.y_max,
+  };
 }
 
 /// An element of size 0x0 drawing nothing.
